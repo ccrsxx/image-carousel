@@ -16,7 +16,7 @@ export function ImageSlider({ currentImage, images }: ImageSliderProps) {
       {images.map(
         ({ src }, index) =>
           index === currentImage && (
-            <a href={src} tabIndex={-1}>
+            <a href={src} tabIndex={-1} key={index}>
               <img
                 className='h-full w-full animate-fade-in rounded object-cover'
                 src={src}

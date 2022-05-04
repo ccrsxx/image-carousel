@@ -6,10 +6,23 @@ export function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    const randomizeGradient = () => {
+      const ogColors = ['#ee7752', '#e73c7e', '#23a6d5', '#23d5ab'];
+
+      const shuffledColors = ogColors
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+
+      shuffledColors.forEach((color, index) =>
+        document.documentElement.style.setProperty(`--color-${index}`, color)
+      );
+    };
     const handleKeyDown = ({ key }: KeyboardEvent) => {
       if (key === 'ArrowLeft') handlePrevImage();
       else if (key === 'ArrowRight') handleNextImage();
     };
+    randomizeGradient();
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
