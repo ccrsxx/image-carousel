@@ -33,7 +33,7 @@ export function App() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
+      (entries) =>
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = parseInt(
@@ -42,8 +42,7 @@ export function App() {
             );
             if (index !== currentImageIndex) setCurrentImageIndex(index);
           }
-        });
-      },
+        }),
       { threshold: 0.5 }
     );
 
