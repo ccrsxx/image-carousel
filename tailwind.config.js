@@ -1,17 +1,32 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
-  content: ['./src/**/*.{ts,tsx}', './public/index.html'],
+  content: ['./src/**/*.tsx', './public/index.html'],
   theme: {
     extend: {
       animation: {
-        'fade-in': 'fade-in 1s ease-in-out'
+        'fade-slide-up': 'fade-slide-up 1s ease-in-out',
+        'spin-gradient': 'spin-gradient 1s linear infinite'
       },
       keyframes: {
-        'fade-in': {
+        'fade-slide-up': {
           from: {
-            opacity: 0
+            opacity: 0,
+            transform: 'translateY(40px)'
           },
           to: {
-            opacity: 1
+            opacity: 1,
+            transform: 'translateY(0)'
+          }
+        },
+        'spin-gradient': {
+          from: {
+            transform: 'rotate(0deg)',
+            color: colors.orange['400']
+          },
+          to: {
+            transform: 'rotate(360deg)',
+            color: colors.pink['400']
           }
         }
       },

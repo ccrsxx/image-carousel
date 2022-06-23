@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
-import { ImageSlider } from './components';
-import { UtilsContext, images } from './common';
+import { ImageSlider, Loading } from './components';
+import { UtilsContext, cacheImages, sleep, images } from './common';
 
 export function App() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const randomizeGradient = () => {
@@ -18,52 +19,81 @@ export function App() {
         document.documentElement.style.setProperty(`--color-${index}`, color)
       );
     };
-    const handleKeyDown = ({ key }: KeyboardEvent) => {
-      if (key === 'ArrowLeft') handlePrevImage();
-      else if (key === 'ArrowRight') handleNextImage();
+    const loadImages = async () => {
+      setIsLoading(true);
+
+      await cacheImages();
+      await sleep(1000);
+
+      setIsLoading(false);
     };
     randomizeGradient();
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    loadImages();
   }, []);
 
   useEffect(() => {
-    const intervalId = setInterval(() => handleNextImage(), 3000);
-    return () => clearInterval(intervalId);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(
+              (entry.target as HTMLAnchorElement).dataset.index!,
+              10
+            );
+            if (index !== currentImageIndex) setCurrentImageIndex(index);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    const dots = document.querySelectorAll('#slider > a');
+    dots.forEach((dot) => observer.observe(dot));
+
+    const intervalId = setInterval(() => handleImage('right')(), 3000);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(intervalId);
+    };
   }, [currentImageIndex]);
 
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prevCurrentImage) =>
-      prevCurrentImage === 0 ? images.length - 1 : prevCurrentImage - 1
-    );
-  };
+  const handleImage =
+    (direction?: 'left' | 'right', targetIndex?: number) => () =>
+      setCurrentImageIndex((prevCurrentImageIndex) => {
+        let nextIndex =
+          targetIndex ??
+          prevCurrentImageIndex + (direction === 'left' ? -1 : 1);
 
-  const handleNextImage = () => {
-    setCurrentImageIndex((prevCurrentImage) =>
-      prevCurrentImage === images.length - 1 ? 0 : prevCurrentImage + 1
-    );
-  };
+        if (nextIndex < 0) nextIndex = images.length - 1;
+        else if (nextIndex === images.length) nextIndex = 0;
 
-  const changeImageIndex = (targetIndex: number) => () => {
-    setCurrentImageIndex(targetIndex);
-  };
+        const selector = `#slider > a:nth-child(${nextIndex + 1})`;
+        const dot = document.querySelector(selector);
+
+        dot!.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'start'
+        });
+
+        return nextIndex;
+      });
 
   const utils = useMemo(
     () => ({
-      handlePrevImage,
-      handleNextImage,
-      changeImageIndex
+      handleImage
     }),
     []
   );
 
   return (
-    <div
-      className='flex min-h-screen items-center justify-center 
-                 bg-gradient-to-r from-pink-500 to-yellow-500'
-    >
+    <div className='mx-6 flex min-h-screen items-center justify-center'>
       <UtilsContext.Provider value={utils}>
-        <ImageSlider currentImage={currentImageIndex} images={images} />
+        {!isLoading ? (
+          <ImageSlider currentImage={currentImageIndex} images={images} />
+        ) : (
+          <Loading />
+        )}
       </UtilsContext.Provider>
     </div>
   );

@@ -9,7 +9,12 @@
   --color-3: '';
 }
 
-#root > div {
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
   animation: live-gradient 15s ease infinite;
   background-image: linear-gradient(
     -45deg,
@@ -31,4 +36,13 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+#slider {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#slider::-webkit-scrollbar {
+  display: none;
 }

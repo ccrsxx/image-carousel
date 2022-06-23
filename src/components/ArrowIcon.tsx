@@ -6,19 +6,17 @@ interface ArrowIconProps {
 }
 
 export function ArrowIcon({ direction }: ArrowIconProps) {
-  const { handlePrevImage, handleNextImage } = useContext(UtilsContext);
+  const { handleImage } = useContext(UtilsContext);
 
-  const { arrowStyle, arrowDirection, arrowFunc } =
+  const { arrowStyle, arrowDirection } =
     direction === 'left'
       ? {
           arrowStyle: 'left-4',
-          arrowDirection: '-translate-x-[2px]',
-          arrowFunc: handlePrevImage
+          arrowDirection: '-translate-x-[2px]'
         }
       : {
           arrowStyle: 'right-4',
-          arrowDirection: 'rotate-180 translate-x-[2px]',
-          arrowFunc: handleNextImage
+          arrowDirection: 'rotate-180 translate-x-[2px]'
         };
 
   return (
@@ -27,7 +25,7 @@ export function ArrowIcon({ direction }: ArrowIconProps) {
                     text-4xl transition duration-300 hover:bg-gray-ish 
                     focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400`}
       type='button'
-      onClick={arrowFunc}
+      onClick={handleImage(direction)}
     >
       <IoIosArrowBack className={arrowDirection} color='white' />
     </button>

@@ -7,7 +7,7 @@ interface CircleButtonProps {
 }
 
 export function CircleButton({ currentImage, images }: CircleButtonProps) {
-  const { changeImageIndex } = useContext(UtilsContext);
+  const { handleImage } = useContext(UtilsContext);
 
   return (
     <ul className='absolute bottom-4 left-[50%] flex -translate-x-[50%] gap-2'>
@@ -19,7 +19,7 @@ export function CircleButton({ currentImage, images }: CircleButtonProps) {
             } h-4 w-4 rounded-full bg-white transition duration-300 focus:outline-none
               focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2`}
             type='button'
-            onClick={changeImageIndex(index)}
+            onClick={handleImage(undefined, index)}
           />
         </li>
       ))}
