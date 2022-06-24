@@ -6,7 +6,7 @@ interface ArrowIconProps {
 }
 
 export function ArrowIcon({ direction }: ArrowIconProps) {
-  const { handleImage } = useContext(UtilsContext);
+  const { handleImageIndexChange } = useContext(UtilsContext);
 
   const { arrowStyle, arrowDirection } =
     direction === 'left'
@@ -25,7 +25,7 @@ export function ArrowIcon({ direction }: ArrowIconProps) {
                     text-4xl transition duration-300 hover:bg-gray-ish 
                     focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400`}
       type='button'
-      onClick={handleImage(direction)}
+      onClick={handleImageIndexChange(direction)}
     >
       <IoIosArrowBack className={arrowDirection} color='white' />
     </button>

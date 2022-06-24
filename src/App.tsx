@@ -22,8 +22,8 @@ export function App() {
     const loadImages = async () => {
       setIsLoading(true);
 
-      await cacheImages();
       await sleep(1000);
+      await cacheImages();
 
       setIsLoading(false);
     };
@@ -49,7 +49,7 @@ export function App() {
     const dots = document.querySelectorAll('#slider > a');
     dots.forEach((dot) => observer.observe(dot));
 
-    const intervalId = setInterval(() => handleImage('right')(), 3000);
+    const intervalId = setInterval(handleImageIndexChange('right'), 3000);
 
     return () => {
       observer.disconnect();
@@ -57,7 +57,7 @@ export function App() {
     };
   }, [currentImageIndex]);
 
-  const handleImage =
+  const handleImageIndexChange =
     (direction?: 'left' | 'right', targetIndex?: number) => () =>
       setCurrentImageIndex((prevCurrentImageIndex) => {
         let nextIndex =
@@ -80,7 +80,7 @@ export function App() {
 
   const utils = useMemo(
     () => ({
-      handleImage
+      handleImageIndexChange
     }),
     []
   );

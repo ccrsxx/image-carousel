@@ -1,5 +1,3 @@
-const colors = require('tailwindcss/colors');
-
 module.exports = {
   content: ['./src/**/*.tsx', './public/index.html'],
   theme: {
@@ -21,12 +19,10 @@ module.exports = {
         },
         'spin-gradient': {
           from: {
-            transform: 'rotate(0deg)',
-            color: colors.orange['400']
+            transform: 'rotate(0deg)'
           },
           to: {
-            transform: 'rotate(360deg)',
-            color: colors.pink['400']
+            transform: 'rotate(360deg)'
           }
         }
       },

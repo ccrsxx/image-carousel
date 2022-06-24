@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 interface UtilsContextProps {
-  handleImage: (
+  handleImageIndexChange: (
     direction?: 'left' | 'right',
     targetIndex?: number
   ) => () => void;
